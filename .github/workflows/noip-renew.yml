@@ -1,0 +1,23 @@
+
+name: No-IP Host Renewal
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 2 * * 1,4"
+
+jobs:
+  renew:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Renew No-IP hosts
+        env:
+          NO_IP_USERNAME: ${{ secrets.NO_IP_USERNAME }}
+          NO_IP_PASSWORD: ${{ secrets.NO_IP_PASSWORD }}
+          NO_IP_TOTP_KEY: ${{ secrets.NO_IP_TOTP_KEY }}
+        run: |
+          docker run --rm \
+            -e NO_IP_USERNAME \
+            -e NO_IP_PASSWORD \
+            -e NO_IP_TOTP_KEY \
+            simaofsilva/noip-renewer:latest
